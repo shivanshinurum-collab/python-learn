@@ -1,0 +1,48 @@
+import torch
+import torch.nn as nn
+import torch.optim as optim
+
+model = nn.Sequential(
+    nn.Conv2d(
+        in_channels=1,
+        out_channels=2,
+        kernel_size=3
+    ),
+    nn.ReLU(),
+    nn.MaxPool2d(kernel_size=2),
+    nn.Flatten(),
+    nn.Linear(2,1),
+    nn.Sigmoid()
+)
+# Fake images
+x = torch.randn(10,1,5,5)
+
+# labels
+y = torch.tensor([
+    [0.0],
+    [0.0],
+    [0.0],
+    [0.0],
+    [0.0],
+    [1.0],
+    [1.0],
+    [1.0],
+    [1.0],
+    [1.0]
+])
+
+loss_fn = nn.BCELoss()
+
+optimization = optim.SGD(model.parameters(), lr=0.01)
+
+for i in range(1000):
+    pred = model(x)
+    loss = loss_fn(pred , y)
+    optimization.zero_grad()
+    loss.backward()
+    optimization.step()
+
+print(loss)
+
+
+
