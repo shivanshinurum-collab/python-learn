@@ -1,0 +1,50 @@
+import torch
+import torch.nn as nn
+import torch.optim as optim
+
+model = nn.Sequential(
+    nn.Linear(1,5),
+    nn.ReLU(),
+    nn.Linear(5,1),
+    nn.Sigmoid()
+)
+
+x = torch.tensor([
+    [1.0],
+    [2.0],
+    [3.0],
+    [4.0],
+    [5.0],
+    [6.0],
+    [7.0]
+])
+y = torch.tensor([
+    [0.0],
+    [0.0],
+    [0.0],
+    [0.0],
+    [1.0],
+    [1.0],
+    [1.0]
+])
+
+loss_fn = nn.BCELoss()
+
+optimization = optim.SGD(model.parameters() , lr=0.01)
+
+for i in range(1000):
+    pred = model(x)
+
+    loss = loss_fn(pred , y)
+
+    optimization.zero_grad()
+
+    loss.backward()
+
+    optimization.step()
+test = torch.tensor([[9.0]])
+result = model(test)
+print(result)
+
+
+
